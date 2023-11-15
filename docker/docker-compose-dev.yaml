@@ -1,0 +1,70 @@
+version: "3"
+
+services:
+  karlsen_explorer:
+    container_name: karlsen_explorer
+    image: karlsennetwork/karlsen-explorer:latest
+    restart: unless-stopped
+    environment:
+      API_URI: "http://localhost:8000"
+      API_WS_URI: "ws://localhost:8000"
+    ports:
+      - "8080:8080/tcp"
+
+  karlsen_rest_server:
+    container_name: karlsen_rest_server
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.dev
+    restart: unless-stopped
+    command: pipenv run uvicorn main:app --reload --host 0.0.0.0 --port 8000 
+    volumes:
+      - "../:/app"
+    environment:
+      KASPAD_HOST_1: karlsend:42110
+      SQL_URI: postgresql+asyncpg://postgres:postgres@postgresql:5432/postgres
+    ports:
+      - "8000:8000/tcp"
+    links:
+      - karlsend
+      - postgresql
+
+  karlsen_db_filler:
+    container_name: karlsen_db_filler
+    image: karlsennetwork/karlsen-db-filler:latest
+    restart: unless-stopped
+    environment:
+      DEBUG: "true"
+      KASPAD_HOST_1: karlsend:42110
+      SQL_URI: postgresql://postgres:postgres@postgresql:5432/postgres
+    links:
+      - karlsend
+      - postgresql
+
+  postgresql:
+    container_name: postgresql
+    image: postgres:14-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432/tcp"
+    volumes:
+      - postgresql:/var/lib/postgresql/data/
+
+  karlsend:
+    container_name: karlsend
+    image: karlsennetwork/karlsend:latest
+    restart: unless-stopped
+    ports:
+      - "42110:42110/tcp"
+      - "42111:42111/tcp"
+    volumes:
+      - karlsend:/app/data/
+    command: karlsend --utxoindex --connect=mainnet-dnsseed-1.karlsencoin.com
+
+volumes:
+  postgresql:
+  karlsend:
