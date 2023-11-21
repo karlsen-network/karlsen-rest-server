@@ -2,8 +2,10 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import messages_pb2 as messages__pb2
-
+try:
+    import messages_pb2 as messages__pb2
+except ImportError:
+    from . import messages_pb2 as messages__pb2
 
 class P2PStub(object):
     """Missing associated documentation comment in .proto file."""
