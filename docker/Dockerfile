@@ -4,7 +4,7 @@ ARG REPO_DIR
 
 EXPOSE 8000
 
-ENV KASPAD_HOST_1=n.mainnet-dnsseed-1.karlsencoin.com:42110
+ENV KARLSEND_HOST_1=n.mainnet-dnsseed-1.karlsencoin.com:42110
 ARG version
 ENV VERSION=$version
 

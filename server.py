@@ -72,12 +72,12 @@ karlsend_hosts = []
 
 for i in range(100):
     try:
-        karlsend_hosts.append(os.environ[f"KASPAD_HOST_{i + 1}"].strip())
+        karlsend_hosts.append(os.environ[f"KARLSEND_HOST_{i + 1}"].strip())
     except KeyError:
         break
 
 if not karlsend_hosts:
-    raise Exception('Please set at least KASPAD_HOST_1 environment variable.')
+    raise Exception('Please set at least KARLSEND_HOST_1 environment variable.')
 
 karlsend_client = KarlsendMultiClient(karlsend_hosts)
 

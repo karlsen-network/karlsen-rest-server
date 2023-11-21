@@ -48,7 +48,7 @@ async def health_state():
             "isSynced": karlsend_info.is_synced,
             "isUtxoIndexed": karlsend_info.is_utxo_indexed,
             "p2pId": hashlib.sha256(karlsend_info.p2p_id.encode()).hexdigest(),
-            "karlsendHost": f"KASPAD_HOST_{i + 1}",
+            "karlsendHost": f"KARLSEND_HOST_{i + 1}",
             "serverVersion": karlsend_info.server_version
         })
 
