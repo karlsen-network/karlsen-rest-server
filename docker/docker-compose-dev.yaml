@@ -21,7 +21,7 @@ services:
     volumes:
       - "../:/app"
     environment:
-      KASPAD_HOST_1: karlsend:42110
+      KARLSEND_HOST_1: karlsend:42110
       SQL_URI: postgresql+asyncpg://postgres:postgres@postgresql:5432/postgres
     ports:
       - "8000:8000/tcp"
@@ -35,7 +35,7 @@ services:
     restart: unless-stopped
     environment:
       DEBUG: "true"
-      KASPAD_HOST_1: karlsend:42110
+      KARLSEND_HOST_1: karlsend:42110
       SQL_URI: postgresql://postgres:postgres@postgresql:5432/postgres
     links:
       - karlsend
