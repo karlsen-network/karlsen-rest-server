@@ -3,7 +3,7 @@
 from pydantic import BaseModel
 from starlette.responses import PlainTextResponse
 
-from helper import get_kas_price, get_kas_market_data
+from helper import get_kls_price, get_kls_market_data
 from server import app
 
 
@@ -17,9 +17,9 @@ async def get_price(stringOnly: bool = False):
     Returns the current price for Karlsen in USD.
     """
     if stringOnly:
-        return PlainTextResponse(content=str(await get_kas_price()))
+        return PlainTextResponse(content=str(await get_kls_price()))
 
-    return {"price": await get_kas_price()}
+    return {"price": await get_kls_price()}
 
 
 @app.get("/info/market-data",
@@ -29,4 +29,4 @@ async def get_market_data():
     """
     Returns market data for karlsen.
     """
-    return await get_kas_market_data()
+    return await get_kls_market_data()
