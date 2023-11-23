@@ -15,7 +15,7 @@ class CoinSupplyResponse(BaseModel):
 @app.get("/info/coinsupply", response_model=CoinSupplyResponse, tags=["Karlsen network info"])
 async def get_coinsupply():
     """
-    Get $KAS coin supply information
+    Get $KLS coin supply information
     """
     resp = await karlsend_client.request("getCoinSupplyRequest")
     return {
@@ -28,7 +28,7 @@ async def get_coinsupply():
          response_class=PlainTextResponse)
 async def get_circulating_coins(in_billion : bool = False):
     """
-    Get circulating amount of $KAS token as numerical value
+    Get circulating amount of $KLS token as numerical value
     """
     resp = await karlsend_client.request("getCoinSupplyRequest")
     coins = str(float(resp["getCoinSupplyResponse"]["circulatingSompi"]) / 100000000)
@@ -42,7 +42,7 @@ async def get_circulating_coins(in_billion : bool = False):
          response_class=PlainTextResponse)
 async def get_total_coins():
     """
-    Get total amount of $KAS token as numerical value
+    Get total amount of $KLS token as numerical value
     """
     resp = await karlsend_client.request("getCoinSupplyRequest")
     return str(float(resp["getCoinSupplyResponse"]["circulatingSompi"]) / 100000000)
