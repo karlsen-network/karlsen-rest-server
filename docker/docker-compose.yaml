@@ -62,7 +62,7 @@ services:
       - $HOME/.karlsend:/app/data/
 #if you use managed volumes
 #      - karlsend:/app/data/
-    command: karlsend --utxoindex --connect=mainnet-dnsseed-1.karlsencoin.com
+    command: ./karlsend --utxoindex --connect=mainnet-dnsseed-1.karlsencoin.com --appdir=/app/data
 
 #if you use managed volumes
 #volumes:
