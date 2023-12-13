@@ -16,6 +16,7 @@ services:
     image: karlsennetwork/karlsen-rest-server:latest
     restart: unless-stopped
     environment:
+      VERSION: 2.1.0
       KARLSEND_HOST_1: karlsend:42110
       SQL_URI: postgresql+asyncpg://postgres:postgres@postgresql:5432/postgres
     ports:
@@ -47,7 +48,8 @@ services:
     ports:
       - "5432:5432/tcp"
     volumes:
-      - postgresql:/var/lib/postgresql/data/
+      - $HOME/.postgresql:/var/lib/postgresql/data/
+#      - postgresql:/var/lib/postgresql/data/
 
   karlsend:
     container_name: karlsend
@@ -57,9 +59,12 @@ services:
       - "42110:42110/tcp"
       - "42111:42111/tcp"
     volumes:
-      - karlsend:/app/data/
+      - $HOME/.karlsend:/app/data/
+#if you use managed volumes
+#      - karlsend:/app/data/
     command: karlsend --utxoindex --connect=mainnet-dnsseed-1.karlsencoin.com
 
-volumes:
-  postgresql:
-  karlsend:
+#if you use managed volumes
+#volumes:
+#  postgresql:
+#  karlsend:
