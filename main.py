@@ -13,6 +13,7 @@ from endpoints.get_halving import get_halving
 from endpoints.get_hashrate import get_hashrate
 from endpoints.get_health import health_state
 from endpoints.get_marketcap import get_marketcap
+from endpoints.get_analytics import get_top_addresses, get_coin_distribution, get_all_addresses
 from endpoints.get_transactions import get_transaction
 from endpoints.get_virtual_chain_blue_score import get_virtual_selected_parent_blue_score
 from endpoints.karlsend_requests.submit_transaction_request import submit_a_new_transaction
