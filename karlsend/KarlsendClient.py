@@ -3,7 +3,7 @@
 from karlsend.KarlsendThread import KarlsendThread
 
 
-# pipenv run python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/rpc.proto ./protos/messages.proto ./protos/p2p.proto
+# pipenv run python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/rpc.proto ./protos/messages.proto
 
 class KarlsendClient(object):
     def __init__(self, karlsend_host, karlsend_port):
