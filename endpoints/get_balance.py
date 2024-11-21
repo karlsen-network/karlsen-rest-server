@@ -1,21 +1,24 @@
 # encoding: utf-8
+import os
 
 from fastapi import Path, HTTPException
 from pydantic import BaseModel
 
 from server import app, karlsend_client
 
+KARLSEN_ADDRESS_PREFIX = os.getenv("ADDRESS_PREFIX", "karlsen")
+
 
 class BalanceResponse(BaseModel):
-    address: str = "karlsen:pzhh76qc82wzduvsrd9xh4zde9qhp0xc8rl7qu2mvl2e42uvdqt75zrcgpm00"
+    address: str = KARLSEN_ADDRESS_PREFIX + ":pzhh76qc82wzduvsrd9xh4zde9qhp0xc8rl7qu2mvl2e42uvdqt75zrcgpm00"
     balance: int = 38240000000
 
 
 @app.get("/addresses/{karlsenAddress}/balance", response_model=BalanceResponse, tags=["Karlsen addresses"])
 async def get_balance_from_karlsen_address(
         karlsenAddress: str = Path(
-            description="Karlsen address as string e.g. karlsen:pzhh76qc82wzduvsrd9xh4zde9qhp0xc8rl7qu2mvl2e42uvdqt75zrcgpm00",
-            regex="^karlsen\:[a-z0-9]{61,63}$")):
+            description="Karlsen address as string e.g. " + KARLSEN_ADDRESS_PREFIX + ":pzhh76qc82wzduvsrd9xh4zde9qhp0xc8rl7qu2mvl2e42uvdqt75zrcgpm00",
+            regex="^" + KARLSEN_ADDRESS_PREFIX + "\:[a-z0-9]{61,63}$")):
     """
     Get balance for a given karlsen address
     """
