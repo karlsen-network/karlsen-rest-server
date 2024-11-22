@@ -59,7 +59,7 @@ async def get_top_addresses(limit: int = 100,
             rich_list.append({
                 "address": amount.address,
                 "amount": round(amount.amount, 8),
-                "percent": round(circulating_percent, 2)
+                "percent": round(circulating_percent, 3)
             })
 
     from_supply_percent = from_supply_total / circulating * 100
@@ -156,7 +156,7 @@ async def get_addresses_in_range(min_amount: int, max_amount: int):
         response.append({
             "address": entry.address,
             "amount": round(entry.amount, 8),
-            "percent": round(circulating_percent, 2)
+            "percent": round(circulating_percent, 3)
         })
 
     return response
