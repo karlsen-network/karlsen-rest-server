@@ -1,4 +1,5 @@
 # encoding: utf-8
+import os
 
 from typing import List
 
@@ -6,6 +7,8 @@ from fastapi import Path, HTTPException
 from pydantic import BaseModel
 
 from server import app, karlsend_client
+
+KARLSEN_ADDRESS_PREFIX = os.getenv("ADDRESS_PREFIX", "karlsen")
 
 
 class OutpointModel(BaseModel):
@@ -24,15 +27,15 @@ class UtxoModel(BaseModel):
 
 
 class UtxoResponse(BaseModel):
-    address: str = "karlsen:qrzk988gtanp3nf76xkpexwud5cxfmfygqf42hz38pwea74s6qrj75jee85nj"
+    address: str = KARLSEN_ADDRESS_PREFIX + ":qrzk988gtanp3nf76xkpexwud5cxfmfygqf42hz38pwea74s6qrj75jee85nj"
     outpoint: OutpointModel
     utxoEntry: UtxoModel
 
 
 @app.get("/addresses/{karlsenAddress}/utxos", response_model=List[UtxoResponse], tags=["Karlsen addresses"])
 async def get_utxos_for_address(karlsenAddress: str = Path(
-    description="Karlsen address as string e.g. karlsen:qqkqkzjvr7zwxxmjxjkmxxdwju9kjs6e9u82uh59z07vgaks6gg62v8707g73",
-    regex="^karlsen\:[a-z0-9]{61,63}$")):
+    description="Karlsen address as string e.g. " + KARLSEN_ADDRESS_PREFIX + ":qqkqkzjvr7zwxxmjxjkmxxdwju9kjs6e9u82uh59z07vgaks6gg62v8707g73",
+    regex="^" + KARLSEN_ADDRESS_PREFIX + "\:[a-z0-9]{61,63}$")):
     """
     Lists all open utxo for a given karlsen address
     """

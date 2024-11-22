@@ -7,7 +7,7 @@ from google.protobuf import json_format
 from grpc._channel import _MultiThreadedRendezvous
 
 from . import messages_pb2_grpc
-from .messages_pb2 import KarlsendMessage
+from .messages_pb2 import KarlsendRequest
 
 
 MAX_MESSAGE_LENGTH = 1024 * 1024 * 1024  # 1GB
@@ -16,7 +16,7 @@ MAX_MESSAGE_LENGTH = 1024 * 1024 * 1024  # 1GB
 class KarlsendCommunicationError(Exception): pass
 
 
-# pipenv run python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/rpc.proto ./protos/messages.proto ./protos/p2p.proto
+# pipenv run python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/rpc.proto ./protos/messages.proto
 
 class KarlsendThread(object):
     def __init__(self, karlsend_host, karlsend_port, async_thread=True):
@@ -73,7 +73,7 @@ class KarlsendThread(object):
             raise KarlsendCommunicationError(str(e))
 
     async def yield_cmd(self, cmd, params=None):
-        msg = KarlsendMessage()
+        msg = KarlsendRequest()
         msg2 = getattr(msg, cmd)
         payload = params
 
@@ -88,7 +88,7 @@ class KarlsendThread(object):
         await self.__queue.get()
 
     def yield_cmd_sync(self, cmd, params=None):
-        msg = KarlsendMessage()
+        msg = KarlsendRequest()
         msg2 = getattr(msg, cmd)
         payload = params
 

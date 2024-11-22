@@ -1,4 +1,5 @@
 # encoding: utf-8
+import os
 from enum import Enum
 from typing import List
 
@@ -16,6 +17,7 @@ from server import app
 DESC_RESOLVE_PARAM = "Use this parameter if you want to fetch the TransactionInput previous outpoint details." \
                      " Light fetches only the address and amount. Full fetches the whole TransactionOutput and " \
                      "adds it into each TxInput."
+KARLSEN_ADDRESS_PREFIX = os.getenv("ADDRESS_PREFIX", "karlsen")
 
 
 class TransactionsReceivedAndSpent(BaseModel):
@@ -46,9 +48,9 @@ class PreviousOutpointLookupMode(str, Enum):
 @sql_db_only
 async def get_transactions_for_address(
         karlsenAddress: str = Path(
-            description="Karlsen address as string e.g. "
-                        "karlsen:pzhh76qc82wzduvsrd9xh4zde9qhp0xc8rl7qu2mvl2e42uvdqt75zrcgpm00",
-            regex="^karlsen\:[a-z0-9]{61,63}$")):
+            description="Karlsen address as string e.g. " + KARLSEN_ADDRESS_PREFIX +
+                        ":pzhh76qc82wzduvsrd9xh4zde9qhp0xc8rl7qu2mvl2e42uvdqt75zrcgpm00",
+            regex="^" + KARLSEN_ADDRESS_PREFIX + "\:[a-z0-9]{61,63}$")):
     """
     Get all transactions for a given address from database
     """
@@ -91,9 +93,9 @@ async def get_transactions_for_address(
 @sql_db_only
 async def get_full_transactions_for_address(
         karlsenAddress: str = Path(
-            description="Karlsen address as string e.g. "
-                        "karlsen:pzhh76qc82wzduvsrd9xh4zde9qhp0xc8rl7qu2mvl2e42uvdqt75zrcgpm00",
-            regex="^karlsen\:[a-z0-9]{61,63}$"),
+            description="Karlsen address as string e.g. " + KARLSEN_ADDRESS_PREFIX +
+                        ":pzhh76qc82wzduvsrd9xh4zde9qhp0xc8rl7qu2mvl2e42uvdqt75zrcgpm00",
+            regex="^" + KARLSEN_ADDRESS_PREFIX + "\:[a-z0-9]{61,63}$"),
         limit: int = Query(
             description="The number of records to get",
             ge=1,
@@ -135,9 +137,9 @@ async def get_full_transactions_for_address(
 @sql_db_only
 async def get_transaction_count_for_address(
         karlsenAddress: str = Path(
-            description="Karlsen address as string e.g. "
-                        "karlsen:pzhh76qc82wzduvsrd9xh4zde9qhp0xc8rl7qu2mvl2e42uvdqt75zrcgpm00",
-            regex="^karlsen\:[a-z0-9]{61,63}$")
+            description="Karlsen address as string e.g. " + KARLSEN_ADDRESS_PREFIX +
+                        ":pzhh76qc82wzduvsrd9xh4zde9qhp0xc8rl7qu2mvl2e42uvdqt75zrcgpm00",
+            regex="^" + KARLSEN_ADDRESS_PREFIX + "\:[a-z0-9]{61,63}$")
 ):
     """
     Count the number of transactions associated with this address

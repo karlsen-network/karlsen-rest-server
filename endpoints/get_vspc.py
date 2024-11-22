@@ -24,15 +24,15 @@ async def get_virtual_selected_parent_chain_from_block(
         startHash: str,
         includeAcceptedTransactionIds: bool = True):
     """
-    GetVirtualSelectedParentChainFromBlockRequestMessage requests the virtual selected parent chain from
+    getVirtualChainFromBlockRequestMessage requests the virtual selected parent chain from
     some startHash to this karlsend's current virtual.
     """
-    resp = await karlsend_client.request("getVirtualSelectedParentChainFromBlockRequest",
+    resp = await karlsend_client.request("getVirtualChainFromBlockRequest",
                                        params={
                                            "startHash": startHash,
                                            "includeAcceptedTransactionIds": includeAcceptedTransactionIds
                                        })
-    resp = resp["getVirtualSelectedParentChainFromBlockResponse"]
+    resp = resp["getVirtualChainFromBlockResponse"]
 
     if resp.get('error'):
         raise HTTPException(400, detail=resp.get('error').get('message'))
