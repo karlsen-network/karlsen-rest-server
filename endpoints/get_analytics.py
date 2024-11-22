@@ -59,7 +59,7 @@ async def get_top_addresses(limit: int = 100,
             rich_list.append({
                 "address": amount.address,
                 "amount": round(amount.amount, 8),
-                "percent": round(circulating_percent, 2)
+                "percent": round(circulating_percent, 3)
             })
 
     from_supply_percent = from_supply_total / circulating * 100
@@ -122,3 +122,41 @@ async def get_all_addresses():
     return {
         "total_addresses": total
     }
+
+@app.get("/analytics/addresses/range", response_model=List[Balances] | str, tags=["Karlsen analytics"])
+async def get_addresses_in_range(min_amount: int, max_amount: int):
+    """
+    Returns a list of addresses within the specified balance range.
+    The 'min_amount' and 'max_amount' parameters define the range of balances to include.
+    """
+    if max_amount < min_amount:
+        raise HTTPException(422, "Maximum amount must be greater than or equal to minimum amount.")
+
+    async with async_session() as s:
+        if max_amount < 0:  # No upper limit
+            address_list = (await s.execute(select(Balance)
+                                            .filter(Balance.amount >= min_amount * 100000000)
+                                            .order_by(Balance.amount.desc()))).scalars().all()
+        else:
+            address_list = (await s.execute(select(Balance)
+                                            .filter(and_(
+                                                Balance.amount >= min_amount * 100000000,
+                                                Balance.amount <= max_amount * 100000000))
+                                            .order_by(Balance.amount.desc()))).scalars().all()
+
+    if not address_list:
+        return "No addresses found within the specified range."
+
+    circulating = float(await get_circulating_coins())
+    response = []
+    for entry in address_list:
+        entry.amount = float(entry.amount / 100000000)
+        circulating_percent = entry.amount / circulating * 100
+
+        response.append({
+            "address": entry.address,
+            "amount": round(entry.amount, 8),
+            "percent": round(circulating_percent, 3)
+        })
+
+    return response
