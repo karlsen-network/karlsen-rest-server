@@ -124,16 +124,13 @@ async def get_all_addresses():
     }
 
 @app.get("/analytics/addresses/range", response_model=List[Balances] | str, tags=["Karlsen analytics"])
-async def get_addresses_in_range(min_amount: int, max_amount: int):
+async def get_addresses_in_range(min_amount: int = 0, max_amount: int = -1):
     """
     Returns a list of addresses within the specified balance range.
     The 'min_amount' and 'max_amount' parameters define the range of balances to include.
     """
-    if max_amount < min_amount:
-        raise HTTPException(422, "Maximum amount must be greater than or equal to minimum amount.")
-
     async with async_session() as s:
-        if max_amount < 0:  # No upper limit
+        if max_amount < 0:
             address_list = (await s.execute(select(Balance)
                                             .filter(Balance.amount >= min_amount * 100000000)
                                             .order_by(Balance.amount.desc()))).scalars().all()
